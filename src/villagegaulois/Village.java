@@ -1,5 +1,7 @@
 package villagegaulois;
 
+import java.util.Iterator;
+
 import personnages.Chef;
 import personnages.Gaulois;
 
@@ -13,6 +15,63 @@ public class Village {
 		this.nom = nom;
 		villageois = new Gaulois[nbVillageoisMaximum];
 	}
+
+	private static class Etals {
+		private Etal[] etals;
+
+		private Etals(int nbEtalsMax) {
+			etals = new Etal[nbEtalsMax];
+			for (int i = 0; i < nbEtalsMax; i++) {
+				etals[i] = new Etal();
+			}
+		}
+
+		public void utiliserEtal(int indiceEtal, Gaulois vendeur, String produit, int nbProduit) {
+			if (!etals[indiceEtal].isEtalOccupe()) {
+				etals[indiceEtal].occuperEtal(vendeur, produit, nbProduit);
+				System.out.println("le" + vendeur + "sest installe dans" + etals[indiceEtal]);
+
+			} else {
+				System.out.println("L'étal " + (indiceEtal + 1) + " est déjà occupé.");
+			}
+		}
+
+		public int trouverEtalLibre() {
+			for (int i = 0; i < etals.length; i++) {
+				if (etals[i].isEtalOccupe() == true) {
+					return i;
+				}
+			}
+			return -1;
+
+		}
+		
+		public Etal[] trouverEtals(String produit) {
+			int nombreEtalSelectionne=0;
+			for (int i = 0; i < etals.length; i++) {
+				if (etals[i].contientProduit(produit)) {
+					nombreEtalSelectionne++;
+						
+				}
+			}
+			Etal[] nouveau = new Etal[nombreEtalSelectionne];
+			for (int i = 0, j =0; i < etals.length; i++) {
+				if (etals[i].contientProduit(produit)) {
+					 nouveau[j]=etals[i];
+					 j++;
+				}
+
+		}
+			return nouveau;
+	}
+		
+		
+		
+		
+		
+		
+		
+	}	
 
 	public String getNom() {
 		return nom;
@@ -45,11 +104,9 @@ public class Village {
 	public String afficherVillageois() {
 		StringBuilder chaine = new StringBuilder();
 		if (nbVillageois < 1) {
-			chaine.append("Il n'y a encore aucun habitant au village du chef "
-					+ chef.getNom() + ".\n");
+			chaine.append("Il n'y a encore aucun habitant au village du chef " + chef.getNom() + ".\n");
 		} else {
-			chaine.append("Au village du chef " + chef.getNom()
-					+ " vivent les légendaires gaulois :\n");
+			chaine.append("Au village du chef " + chef.getNom() + " vivent les légendaires gaulois :\n");
 			for (int i = 0; i < nbVillageois; i++) {
 				chaine.append("- " + villageois[i].getNom() + "\n");
 			}
